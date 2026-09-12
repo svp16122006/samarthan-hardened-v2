@@ -1,0 +1,13 @@
+{% extends 'base.html' %}{% block title %}Samarthan · Check-in received{% endblock %}{% block content %}
+<section class="received-wrap"><div id="reviewToast" class="review-toast" aria-live="polite"><span>✓</span><div><b>Counsellor reviewed your check-in</b><small>Your support status has been updated.</small></div></div><div class="received-icon">✓</div><div class="eyebrow">CHECK-IN RECEIVED</div><h1>Thank you for checking in.</h1><p>Your response has been securely received. An authorised counsellor may review it when follow-up is indicated.</p><div class="reference-box"><span>REFERENCE</span><b>{{case_id}}</b><small>Keep this reference if your support team asks for it.</small></div>
+<div id="reviewStatus" class="victim-status-card pending"><div class="status-icon">○</div><div><div class="eyebrow">SUPPORT STATUS</div><h3>Awaiting counsellor review</h3><p>Your check-in has been received. Please wait patiently while your support status is updated.</p></div></div>
+<div class="next-card"><div><b>What happens now?</b><p>Your response can be triaged, placed in a human review queue, and followed up by authorised staff. Your distress score is not displayed here.</p></div><div class="next-steps"><span>01 · Received ✓</span><span>02 · AI triage</span><span id="step3">03 · Human review</span></div></div><a class="submit-checkin" href="/victim"><span>Return to check-in</span><span>→</span></a><p class="quiet">This demonstration uses synthetic data and is not a clinical service.</p></section>
+<script>
+async function refreshStatus(){
+  try{const r=await fetch('/api/victim-status/{{case_id}}/{{checkin_id}}'); if(!r.ok)return; const d=await r.json(); const box=document.getElementById('reviewStatus');
+    if(d.reviewed){box.className='victim-status-card reviewed'; box.innerHTML='<div class="status-icon">✓</div><div><div class="eyebrow">COUNSELLOR REVIEWED</div><h3>Your check-in has been reviewed</h3><p>A counsellor has reviewed this check-in. Please wait patiently. We will continue to keep in touch and monitor your well-being.</p><small>Follow-up status: '+d.followup_status+'</small></div>'; document.getElementById('step3').textContent='03 · Counsellor reviewed ✓'; const toast=document.getElementById('reviewToast'); toast.classList.add('show');}
+  }catch(e){}
+}
+refreshStatus(); setInterval(refreshStatus,8000);
+</script>
+{% endblock %}

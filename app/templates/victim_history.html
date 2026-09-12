@@ -1,0 +1,15 @@
+{% extends 'base.html' %}{% block title %}Samarthan · My support history{% endblock %}{% block content %}
+<div class="portal-head"><div><div class="eyebrow">MY SUPPORT JOURNEY</div><h1>Your check-in history</h1><p>Only the check-ins associated with this support case are shown here. Internal AI scores and counsellor notes remain private.</p></div><div class="privacy-chip">🔒 Case-scoped view</div></div>
+<div class="history-header"><div><span class="eyebrow">CASE REFERENCE</span><h2>{{case.id}}</h2><p>{{case.case_stage}} · Support status: {{case.safety_status|title}}</p></div><div class="history-actions"><select aria-label="Select case" onchange="if(this.value) window.location.href='/victim/history?case_id='+encodeURIComponent(this.value)">{% for x in all_cases %}<option value="{{x.id}}" {% if x.id == case.id %}selected{% endif %}>{{x.id}}</option>{% endfor %}</select><a class="soft-btn" href="/victim">← New check-in</a></div></div>
+{% if checks %}<section class="history-list">
+{% for c in checks %}<article class="history-item">
+<div class="history-marker {% if c.reviewed_at %}reviewed{% endif %}">{% if c.reviewed_at %}✓{% else %}○{% endif %}</div>
+<div class="history-body"><div class="history-meta"><b>Check-in #{{c.id}}</b><span>{{c.created_at}}</span><span>{{c.channel}}</span></div>
+<p class="history-text">{{c.text}}</p>
+<div class="history-status-row">
+{% if c.reviewed_at %}<span class="status-pill reviewed-pill">✓ Counsellor reviewed</span><span class="followup-pill">Follow-up: {{c.followup_status or 'Monitoring'}}</span><small>Reviewed {{c.reviewed_at}}</small>{% else %}<span class="status-pill pending-pill">○ Awaiting counsellor review</span><span class="followup-pill">Follow-up: {{c.followup_status or 'Monitoring'}}</span>{% endif %}
+</div></div></article>
+{% endfor %}</section>
+{% else %}<div class="empty-state"><h3>No previous check-ins</h3><p>Your submitted check-ins will appear here.</p></div>{% endif %}
+<div class="history-note"><b>Your privacy</b><p>This view intentionally does not display distress scores, model probabilities, internal explanations, or counsellor notes.</p></div>
+{% endblock %}

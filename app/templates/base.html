@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>{% block title %}Samarthan{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="app-shell">
+<header class="topbar">
+  <a class="brand" href="/"><span class="brand-mark">S</span><span>samarthan</span><small>SIH26094</small></a>
+  <div class="topbar-right"><span class="demo-badge">DEMO · SYNTHETIC DATA</span><span class="status-dot"></span><span class="status-text">System operational</span></div>
+</header>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="role-switch">
+      <div class="role-label">CURRENT WORKSPACE</div>
+      {% if role == 'victim' %}<div class="role-card active victim-role"><span class="role-icon">♡</span><div><b>Victim Support</b><small>Private check-in</small></div></div>
+      {% elif role == 'counsellor' %}<div class="role-card active"><span class="role-icon">◈</span><div><b>Counsellor Console</b><small>Human review</small></div></div>
+      {% else %}<div class="role-card active"><span class="role-icon">S</span><div><b>Samarthan</b><small>Choose a workspace</small></div></div>{% endif %}
+    </div>
+    {% if role == 'victim' %}
+      <nav class="side-nav"><div class="nav-section">SUPPORT</div><a class="nav-item {% if active=='victim' %}active{% endif %}" href="/victim"><span>⌂</span> My check-in</a><a class="nav-item {% if active=='history' %}active{% endif %}" href="/victim/history"><span>▤</span> My support history</a><a class="nav-item" href="/victim/help"><span>?</span> Help & safety</a><div class="nav-section">SWITCH</div><a class="nav-item" href="/">Role selection</a></nav>
+      <div class="sidebar-note"><b>Your words stay separate.</b><p>Distress signals are for authorised support triage, not credibility scoring or prosecution decisions.</p></div>
+    {% elif role == 'counsellor' %}
+      <nav class="side-nav"><div class="nav-section">CASEWORK</div><a class="nav-item {% if active=='counsellor' %}active{% endif %}" href="/counsellor"><span>▦</span> Overview</a><a class="nav-item {% if active=='queue' %}active{% endif %}" href="/queue"><span>!</span> Priority queue</a><a class="nav-item" href="/validation"><span>✓</span> Validation lab</a><div class="nav-section">GOVERNANCE</div><a class="nav-item" href="/integrations"><span>↔</span> Integrations</a><a class="nav-item" href="/audit"><span>◌</span> Audit trail</a><div class="nav-section">SWITCH</div><a class="nav-item" href="/">Role selection</a></nav>
+      <div class="sidebar-note counselor"><b>Human decision required.</b><p>AI proposes a triage signal. Authorised staff make the final decision and record the intervention.</p></div>
+    {% else %}
+      <nav class="side-nav"><div class="nav-section">DEMO</div><a class="nav-item active" href="/"><span>⌂</span> Role selection</a><a class="nav-item" href="/victim"><span>♡</span> Victim portal</a><a class="nav-item" href="/counsellor"><span>◈</span> Counsellor console</a></nav>
+    {% endif %}
+  </aside>
+  <main class="content">{% block content %}{% endblock %}</main>
+</div>
+<footer>Samarthan engineering POC · AI = triage support · Human = final decision · No diagnosis, suicide prediction, deception detection or credibility scoring.</footer>
+</body>
+</html>
